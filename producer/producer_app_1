@@ -1,0 +1,20 @@
+from kafka import KafkaProducer
+import os
+
+# Set up producer properties
+
+bootstrap_servers = ['localhost:9092']
+topic_name = 'my_topic'
+value_serializer = lambda m: json.dumps(m).encode('ascii')
+
+# Create a Kafka producer instance
+producer = KafkaProducer(security_protocol="SSL", bootstrap_servers=bootstrap_servers, value_serializer=value_serializer, api_version=(0,11,5))
+
+# Send messages to Kafka
+for i in range(10):
+    message = {'id': i, 'text': f'Message {i}'}
+    producer.send(topic_name, value=message)
+
+# Wait for all messages to be sent before closing the producer
+producer.flush()
+producer.close()
