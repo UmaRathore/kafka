@@ -1,0 +1,36 @@
+# docker compose to run kafka 5.4.0 brokers and zookeepers
+
+# To run docker container with kafka broker and zk image
+# docker-compose -f docker-compose.yml up -d
+# To enter into docker kafka shell
+# docker exec -it kafka /bin/sh
+
+
+version: '2'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:5.4.0
+    container_name: zookeeper
+    ports:
+     - "2181:2181" 
+    environment:
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_INIT_LIMIT: 5
+      ZOOKEEPER_SYNC_LIMIT: 2
+  kafka:
+    image: confluentinc/cp-kafka:5.4.0
+    container_name: kafka
+    ports:
+     - "9092:9092"
+    depends_on:
+     - zookeeper
+    environment: 
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+    extra_hosts:
+     - "moby:127.0.0.1"
+     - "localhost: 127.0.0.1"
