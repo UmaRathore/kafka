@@ -1,0 +1,22 @@
+from confluent_kafka import Producer
+
+# Set the Kafka bootstrap server and security protocol properties
+conf = {
+    'bootstrap.servers': 'pkc-4rn2p.canadacentral.azure.confluent.cloud:9092',
+    'security.protocol': 'SASL_SSL',
+    'sasl.mechanism': 'PLAIN',
+    'sasl.username': 'FUJPAB42YYI5ZJVX',
+    'sasl.password': 'JT74jB6vK1xplMrLgPhO/1l/VfDVhUUiKYoXS9LRgrT+BI6RZMEqyvk5GIFKnl3Q'
+}
+
+# Define the topic to produce to
+topic = 'topic_demo_1'
+
+# Create a Kafka producer object
+producer = Producer(conf)
+
+# Produce a message to the Kafka topic
+producer.produce(topic, key='2', value='hello uma')
+
+# Flush the producer to ensure that all messages are sent
+producer.flush()
